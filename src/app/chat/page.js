@@ -7,7 +7,7 @@ import { db, auth } from '@/lib/firebaseConfig';
 import { collection, addDoc } from "firebase/firestore";
 import { loadUserChats } from '@/lib/firestoreHelpers';
 import { Header } from "@/components/Header";
-import { ChatWindow } from '@/components/ChatWindow';
+import { ChatWindow } from '@/components/chatwindow';
 import toast from 'react-hot-toast';
 import { Menu } from 'lucide-react';
 
