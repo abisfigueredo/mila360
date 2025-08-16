@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "mila360",
-  description: "mila360 tu asistente virtual en la ley 2365",
+  title: "Mila360",
+  description: "Mila360 tu asistente virtual en la ley 2365",
 };
 
 export default function RootLayout({ children }) {

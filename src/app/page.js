@@ -206,8 +206,12 @@ export default function Home() {
             </div>
 
             {/* Grid de dos columnas */}
-            <div className="grid grid-cols-1 md:grid-cols-[30%_67%] gap-8 items-start">
+            {/*<div className="grid grid-cols-1 md:grid-cols-[30%_67%] gap-8 items-start">
               <GuideInfo />
+              <ContactForm />
+            </div>*/}
+
+            <div className="max-w-xl w-full mx-auto">
               <ContactForm />
             </div>
           </div>

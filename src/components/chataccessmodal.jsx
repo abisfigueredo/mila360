@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PrivacyPolicyModal } from "./privacypolicymodal";
 import { PasswordSetupModal } from "@/components/passwordsetupmodal";
 import { LoginModal } from "@/components/loginmodal";
@@ -11,25 +11,55 @@ export default function ChatAccessModal({ onClose, onLogin }) {
   const [loading, setLoading] = useState(false);
   const [showPasswordSetup, setShowPasswordSetup] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { checkEmail, loading: checkingEmail } = useEmailCheck(); // Hook para verificar si el correo está registrado en firebase
-
-
+  const [emailExists, setEmailExists] = useState(null);
   // Estado para los datos del formulario
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
     cargo: '',
+    empresa: '',
     email: '',
     aceptaTratamiento: false,
   });
+
+  const { checkEmail, loading: checkingEmail } = useEmailCheck(); // Hook para verificar si el correo está registrado en firebase
+  
+  const normalizedEmail = formData.email.trim().toLowerCase();
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail);
 
   // Verifica si todos los campos están completos y el checkbox está marcado
   const isFormValid =
     formData.nombre.trim() &&
     formData.apellido.trim() &&
     formData.cargo.trim() &&
+    formData.empresa.trim() &&
     formData.email.trim() &&
-    formData.aceptaTratamiento;
+    formData.aceptaTratamiento &&
+    isValidEmail &&
+    emailExists === false;
+
+  // Verificar si el correo digitado es valido o si si ya esta registrado
+  useEffect(() => {
+    const normalizedEmail = formData.email.trim().toLowerCase();
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail);
+
+    if (!isValidEmail) {
+      setEmailExists(null);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      try {
+        const exists = await checkEmail(normalizedEmail);
+        setEmailExists(exists);
+      } catch (error) {
+        console.error("Error al verificar el correo:", error);
+        setEmailExists(null); // En caso de error, no mostrar nada
+      }
+    }, 500); // Espera 500ms antes de verificar
+
+    return () => clearTimeout(timeout); // Cancela si el usuario sigue escribiendo
+  }, [normalizedEmail]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -39,20 +69,14 @@ export default function ChatAccessModal({ onClose, onLogin }) {
     }));
   };
 
+  // Maneja el envío del formulario
   const handleSubmit = async () => {
     if (!isFormValid) return;
     setLoading(true);
-
-    const isRegistered = await checkEmail(formData.email);
-    
-    if (isRegistered === true) {
-      setShowLoginModal(true); // Ya existe -> mostrar login
-    } else if (isRegistered === false) {
-      setShowPasswordSetup(formData); // No existe -> mostrar setup
-    }
-
+    setShowPasswordSetup(formData); // enviar todos los datos al modal de configuración de contraseña
     setLoading(false);
   };
+
 
   return (
     <>
@@ -100,7 +124,28 @@ export default function ChatAccessModal({ onClose, onLogin }) {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-700">Empresa</label>
+              <input
+                type="text"
+                name="empresa"
+                value={formData.empresa}
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-gray-700"
+              />
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700">Correo Institucional</label>
+              
+              {formData.email && !isValidEmail && (
+                <p className="text-sm text-yellow-600 mt-1">Formato de correo inválido.</p>
+              )}
+              {emailExists === true && (
+                <p className="text-sm text-red-500 mt-1">Este correo ya está registrado.</p>
+              )}
+              {checkingEmail && (
+                <p className="text-sm text-gray-500 mt-1">Verificando correo...</p>
+              )}
+
               <input
                 type="email"
                 name="email"

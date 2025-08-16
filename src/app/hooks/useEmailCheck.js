@@ -1,16 +1,25 @@
 import { useState } from "react";
-import { getAuth, fetchSignInMethodsForEmail } from "firebase/auth";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
+import { auth } from "@/lib/firebaseConfig";
+
+const isValidEmail = (email) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export const useEmailCheck = () => {
   const [loading, setLoading] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(null);
-  const auth = getAuth();
 
   const checkEmail = async (email) => {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!isValidEmail(normalizedEmail)) {
+      console.warn("Correo inválido para verificación:", normalizedEmail);
+      return null;
+    }
+
     setLoading(true);
     try {
-      const methods = await fetchSignInMethodsForEmail(auth, email.toLowerCase());
-      setIsRegistered(methods.length > 0);
+      const methods = await fetchSignInMethodsForEmail(auth, normalizedEmail);
+      console.log("Métodos encontrados para", normalizedEmail, ":", methods);
       return methods.length > 0;
     } catch (error) {
       console.error("Error al verificar correo:", error);
@@ -20,5 +29,7 @@ export const useEmailCheck = () => {
     }
   };
 
-  return { checkEmail, isRegistered, loading };
+  return { checkEmail, loading };
 };
+
+

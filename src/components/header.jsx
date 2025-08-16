@@ -30,7 +30,7 @@ export const Header = ({ onOpenLogin, hideNav = false }) => {
         <div className="flex justify-between items-center h-16">
           <Link href="/">
             <div className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-[#df7b7b]">mila360</h1>
+              <h1 className="text-2xl font-bold text-[#df7b7b]">Mila360</h1>
             </div>
           </Link>
 

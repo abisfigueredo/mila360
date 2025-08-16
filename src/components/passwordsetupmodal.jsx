@@ -45,7 +45,10 @@ export const PasswordSetupModal = ({ formData, onSuccess, onClose }) => {
             first: formData.nombre?.trim() || "",
             last: formData.apellido?.trim() || "",
           },
-          role: formData.cargo?.trim() || "",
+          bussinesdata: {
+            company: formData.empresa?.trim() || "",
+            position: formData.cargo?.trim() || "",
+          },
           email,
           registered: {
             date: serverTimestamp(),
