@@ -83,12 +83,15 @@ export default function ChatPage() {
       <Header hideNav={true} />
       <main className="flex h-screen pt-16 bg-white text-gray-900 relative">
         {/* Ícono acordeón en móvil */}
-        <button
-          className="absolute top-4 left-4 z-40 md:hidden text-[#df7b7b]"
-          onClick={() => setShowSidebarMobile(true)}
-        >
-          <Menu className="w-6 h-6" />
-        </button>
+        <div className="md:hidden px-4 py-2 bg-white border-b border-gray-200">
+          <button
+            className="text-[#df7b7b]"
+            onClick={() => setShowSidebarMobile(true)}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+
 
         {/* Panel lateral en escritorio */}
         <aside
@@ -137,7 +140,7 @@ export default function ChatPage() {
 
         {/* Panel lateral móvil como overlay */}
         {showSidebarMobile && (
-          <aside className="fixed inset-0 z-50 bg-[#152c62] text-white overflow-y-auto md:hidden">
+          <aside className="fixed top-16 left-0 right-0 bottom-0 z-50 bg-[#152c62] text-white overflow-y-auto md:hidden">
             <div className="flex justify-between items-center p-4 border-b border-[#1e3a8a]">
               <h2 className="text-lg font-semibold">Tus conversaciones</h2>
               <button onClick={() => setShowSidebarMobile(false)}>
