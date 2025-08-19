@@ -43,11 +43,11 @@ export default function ChatPage() {
       const newChatRef = await addDoc(chatsRef, {
         createdAt: Date.now(),
         updatedAt: Date.now(),
-        lastMessage: "Hola 👋, soy MILA. ¿Te gustaría hacer un diagnóstico exprés?",
+        lastMessage: "Hola 👋, soy MILA, tu asistente especializado en prevención del acoso sexual laboral, ¿Te gustaría que hagamos un diagnóstico rapido para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?",
       });
 
       const welcomeMessage = {
-        text: "Hola 👋, soy MILA. ¿Te gustaría hacer un diagnóstico exprés?",
+        text: "Hola 👋, soy MILA, tu asistente especializado en prevención del acoso sexual laboral, ¿Te gustaría que hagamos un diagnóstico rapido para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?",
         sender: "MILA",
         timestamp: Date.now(),
       };
@@ -122,7 +122,7 @@ export default function ChatPage() {
                 }`}
                 onClick={() => handleSelectChat(chat)}
               >
-                <p className="font-low text-gray-700">
+                <p className="font-medium text-gray-700">
                   {chat.lastMessage?.slice(0, 40) || 'Sin mensajes aún'}
                 </p>
                 <span className="text-xs text-gray-700 block">
@@ -140,18 +140,20 @@ export default function ChatPage() {
 
         {/* Panel lateral móvil como overlay */}
         {showSidebarMobile && (
-          <aside className="fixed top-16 left-0 right-0 bottom-0 z-50 bg-[#152c62] text-white overflow-y-auto md:hidden">
-            <div className="flex justify-between items-center p-4 border-b border-[#1e3a8a]">
+          <aside className="fixed top-16 left-0 right-0 bottom-0 z-50 bg-gray-50 text-gray-700 overflow-y-auto md:hidden border-r border-gray-200">
+            <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold">Tus conversaciones</h2>
-              <button onClick={() => setShowSidebarMobile(false)}>
-                <Menu className="w-6 h-6 text-white rotate-180" />
+              <button 
+                onClick={() => setShowSidebarMobile(false)}
+              >
+                <Menu className="w-6 h-6 text-gray-700 rotate-180" />
               </button>
             </div>
 
             <div className="px-4 mb-2">
               <button
-                className={`w-full bg-[#1e3a8a] text-white py-2 rounded transition-colors shadow-md ${
-                  creatingChat ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#1e40af]'
+                className={`w-full bg-[#df7b7b] text-white py-2 rounded transition-colors shadow-md ${
+                  creatingChat ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#d45858]'
                 }`}
                 onClick={handleNewConversation}
                 disabled={creatingChat}
@@ -164,15 +166,15 @@ export default function ChatPage() {
               {chatList.map((chat) => (
                 <li
                   key={chat.id}
-                  className={`p-4 cursor-pointer border-b border-[#1e3a8a] hover:bg-[#1e40af] ${
-                    activeConversation?.id === chat.id ? 'bg-[#1e3a8a]' : ''
+                  className={`p-4 cursor-pointer border-b border-gray-200 hover:bg-gray-200 ${
+                    activeConversation?.id === chat.id ? 'bg-gray-400' : ''
                   }`}
                   onClick={() => handleSelectChat(chat)}
                 >
-                  <p className="font-medium text-white">
+                  <p className="font-medium text-gray-700">
                     {chat.lastMessage?.slice(0, 40) || 'Sin mensajes aún'}
                   </p>
-                  <span className="text-xs text-gray-300 block">
+                  <span className="text-xs text-gray-700 block">
                     {new Date(chat.updatedAt || chat.createdAt).toLocaleString()}
                   </span>
                   {!chat.lastMessage && (

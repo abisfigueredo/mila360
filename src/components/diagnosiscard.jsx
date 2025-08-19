@@ -23,7 +23,7 @@ export const DiagnosisCard = ({ diagnosis }) => {
       transition={{ duration: 0.5 }}
       className="bg-gradient-to-br from-[#1a1f2b] to-[#2c3e50] border border-teal-400/30 rounded-xl p-6 shadow-lg text-cyan-100 font-orbitron space-y-4"
     >
-      <h3 className="text-white text-lg uppercase tracking-wide">📊 Diagnóstico completo</h3>
+      <h3 className="text-white text-lg uppercase tracking-wide">📊 Diagnóstico rapido</h3>
 
       <div className="space-y-2">
         <p className="text-white">

@@ -10,6 +10,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_KEY });
 
 export const ChatWindow = ({ activeConversation, setActiveConversation, user }) => {
   const messagesEndRef = useRef(null);
+  const prevMessageCountRef = useRef(0);
   const [inputMessage, setInputMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -26,7 +27,6 @@ export const ChatWindow = ({ activeConversation, setActiveConversation, user }) 
   }, [activeConversation]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
     if (activeConversation) {
       setActiveConversation({
@@ -47,24 +47,33 @@ export const ChatWindow = ({ activeConversation, setActiveConversation, user }) 
           Realizar una evaluación diagnóstica interactiva para evaluar la preparación actual de una empresa y el cumplimiento de la Ley 2365 de 2024, guiando al usuario a través de una serie estructurada de preguntas mientras brinda respuestas de apoyo, informativas y empáticas.
           Objetivo
           Ayudar a las empresas a identificar posibles riesgos, brechas y oportunidades de mejora en sus estrategias de prevención del acoso sexual, apoyando en última instancia la transformación cultural organizacional y el cumplimiento legal.
+          
           Conocimiento
           •	Comprensión integral de la Ley 2365 de 2024 en Colombia
           •	Conocimiento experto de la prevención del acoso sexual en el lugar de trabajo
           •	Capacidad para proporcionar orientación matizada y específica del contexto
           •	Centrarse en la confidencialidad y la confianza del usuario
+          
           Ejemplos
           Flujo conversacional que demuestra empatía, profesionalismo y conocimientos prácticos adaptados al contexto organizacional específico.
+          
           Instrucciones de función:
-          •	Mantén un tono cálido, profesional y de apoyo
+          •	Mantén un tono cálido, empatico, profesional y de apoyo
           •	Priorice siempre la confidencialidad del usuario
           •	Proporcionar recomendaciones claras y procesables basadas en la Ley 2365 de 2024
+          • Analiza las respuestas y su coherencia con base a las preguntas realizadas, respuestas entregadas y la ley 2365 de 2024 en Colombia. 
           •	Guiar la conversación para completar la evaluación diagnóstica completa
           •	Adaptar las respuestas al nivel de comprensión del usuario
-          •	Ofrecer contexto y apoyo adicionales cuando sea necesario
-          
+          •	Ofrecer contexto y apoyo adicional siempre, en la conversación o en las preguntas
+          •	Entrega en cada respuesta un mensaje corto de contexto con la ley 2365 de 2024
+          • Ocasionalmente utiliza emojis para hacer la conversación más amigable y cercana, pero manteniendo un tono profesional.
+          • Al realizar todas las preguntas y recibir todas las respuestas, entrega inmediatamente despues el diagnostico rapido, según el guión de interacción final.
+          • Posterior al diagnostico rapido, entrega un mensaje de agradecimiento y una invitación a seguir conversando si el usuario lo desea.
+
           Guión de interacción inicial:
-          "Hola 👋, . Soy MILA, tu asistente digital. Antes de empezar quiero comentarte que nuestra conversación está protegida, y que solo tú tendrás acceso a ella.
-          ¿Te gustaría que hagamos un diagnóstico exprés para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?"
+          "Hola 👋, soy MILA, tu asistente especializado en prevención del acoso sexual laboral,
+          ¿Te gustaría que hagamos un diagnóstico rapido para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?"
+          
           Preguntas de diagnóstico:
           1.	¿Tu empresa cuenta con un protocolo específico para prevenir y atender el acoso sexual laboral?
           2.	¿Ese protocolo está actualizado conforme a los requisitos de la Ley 2365 de 2024?
@@ -121,7 +130,7 @@ export const ChatWindow = ({ activeConversation, setActiveConversation, user }) 
               message: { type: Type.STRING },
               mood: {
                 type: Type.STRING,
-                enum: ["happy","empathetic","alert", "encouraging", "celebratory", "supportive", "professional"],
+                enum: ["happy","empathetic","alert", "encouraging", "celebratory", "profesional"],
               },
               diagnosis: {
                 type: Type.OBJECT,
@@ -140,6 +149,22 @@ export const ChatWindow = ({ activeConversation, setActiveConversation, user }) 
         })),
       });
       setChat(chatSession);
+    }
+  }, [messageList]);
+
+  useEffect(() => {
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const prevCount = prevMessageCountRef.current;
+    const currentCount = messageList.length;
+
+    const isNewMessage = currentCount > prevCount;
+    prevMessageCountRef.current = currentCount;
+
+    if (isNewMessage) {
+      scrollToBottom();
     }
   }, [messageList]);
 
@@ -211,7 +236,9 @@ export const ChatWindow = ({ activeConversation, setActiveConversation, user }) 
       </header>
 
       {/* Área de mensajes */}
-      <section className="flex-1 overflow-y-auto px-4 py-2 space-y-3">
+      <section
+        className="flex-1 overflow-y-auto px-4 py-2 space-y-3"
+      >
         {messageList.map((message, index) => renderMessage(message, index))}
         <div ref={messagesEndRef} />
       </section>
