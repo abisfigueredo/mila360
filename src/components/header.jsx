@@ -4,6 +4,7 @@ import Link from "next/link";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/lib/firebaseConfig";
 import { useRouter } from "next/navigation";
+import {MobileMenu} from "@/components/mobilemenu";
 
 export const Header = ({ onOpenLogin, hideNav = false }) => {
   const [presetEmail, setPresetEmail] = useState("");
@@ -33,7 +34,7 @@ export const Header = ({ onOpenLogin, hideNav = false }) => {
               <h1 className="text-2xl font-bold text-[#df7b7b]">Mila360</h1>
             </div>
           </Link>
-
+          {/* Menú en dispositivos grandes */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               {!hideNav && (
@@ -90,6 +91,10 @@ export const Header = ({ onOpenLogin, hideNav = false }) => {
                 )}
               </div>
             </div>
+          </div>
+          {/* Menú en dispositivos pequeños */}
+          <div className="md:hidden">
+            <MobileMenu onOpenChat={() => onOpenLogin(presetEmail)} />
           </div>
         </div>
       </nav>
