@@ -9,7 +9,7 @@ import VideoModalSection from "@/components/videomodalsection";
 import { ContactForm } from "@/components/contactform";
 import { GuideInfo } from "@/components/guideinfo";
 import { Footer } from "@/components/footer";
-import { Clock, AlertTriangle, Scale, Handshake, Shield, Brain, Users, Award, Play, Star, CheckCircle } from 'lucide-react';
+import { Clock, AlertTriangle, Scale, Handshake, Shield, Brain, BrainCircuit, Cable, BarChart3, Network, ShieldCheck, Users, Award, Play, Star, CheckCircle } from 'lucide-react';
 import Link from "next/link";
 import AOS from 'aos'; // Para efecto visual de animación en secciones
 import 'aos/dist/aos.css'; // Para efecto visual de animación en secciones
@@ -81,9 +81,6 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Una empresa consciente no puede ser neutral
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Las empresas que no cumplan con la Ley 2365 enfrentan serias consecuencias
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -114,51 +111,59 @@ export default function Home() {
                 </p>
               </div>
             </div>
-
-
           </div>
-        </section>    
+        </section>
 
         {/* Solution Section */}
-        <section id="features" className="py-16 bg-gray-50" data-aos="zoom-in">
+        <section className="py-16 bg-gray-50" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Lo que obtendrás con Mila360
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Tecnología de IA para una cultura organizacional segura
-              </p>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-              <div className="text-center p-6 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
-                <Clock className="w-12 h-12 text-[#df7b7b] mx-auto mb-4" />
-                <h3 className="text-base font-semibold text-gray-900 mb-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+              <div className="border border-[#df7b7b]/20 rounded-xl p-6 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#df7b7b]/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <Clock  className="h-8 w-8 text-[#df7b7b]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">
                   Plan de prevención en minutos
                 </h3>
               </div>
-              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xlg">
-                <Users className="w-12 h-12 text-[#152c62] mx-auto mb-4" />
-                <h3 className="text-base font-semibold text-gray-900 mb-2">
-                  Forma a tu equipo con contenido claro y humano.
+
+              <div className="border border-purple-500/20 rounded-xl p-6 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-purple-500/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <Users className="h-8 w-8 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">
+                  Forma tu equipo con contenido claro y humano.
                 </h3>
               </div>
-              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
-                <Award className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-                <h3 className="text-base font-semibold text-gray-900 mb-2">
-                  Adapta el plan a la cultura de tu empresa.
+
+              <div className="border border-[#6fb2ab]/20 rounded-xl p-6 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#6fb2ab]/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <Award className="h-8 w-8 text-[#6fb2ab]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">
+                  Adapta el plan a la cultura de tu empresa
                 </h3>
               </div>
-              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
-                <Brain className="w-12 h-12 text-[#6fb2ab] mx-auto mb-4" />
-                <h3 className="text-base font-semibold text-gray-900 mb-2">
+
+              <div className="border border-yellow-200 rounded-xl p-6 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-yellow-50 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <Brain className="h-8 w-8 text-yellow-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">
                   Accede a consultoria experta cuando más lo necesites.
                 </h3>
               </div>
-              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xlg">
-                <Shield className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="text-base font-semibold text-gray-900 mb-2">
+
+              <div className="border border-[#cce0ff] rounded-xl p-6 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#e6f0ff] p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <ShieldCheck className="h-8 w-8 text-[#3366cc]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">
                   Evita sanciones, protege tu reputación y cumple con la normativa.
                 </h3>
               </div>
@@ -174,8 +179,85 @@ export default function Home() {
           videoUrl="https://www.youtube.com/embed/EhUj1q9X17Y?rel=0&autoplay=1&controls=1"
         />
 
-        {/* Testimonials Section */}
+        {/* Why Section */}
         <section className="py-16 bg-gray-50" data-aos="zoom-in">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                ¿Por qué Mila360?
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+              <div className="border border-[#df7b7b]/20 rounded-xl p-4 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#df7b7b]/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <BrainCircuit className="h-8 w-8 text-[#df7b7b]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">Tecnología con propósito</h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  IA especializada en entornos laborales seguros.
+                </p>
+                <div className="bg-[#df7b7b]/5 rounded-lg p-3">
+                  <span className="text-[#df7b7b] font-bold text-lg">Tecnología</span>
+                </div>
+              </div>
+
+              <div className="border border-[#df7b7b]/20 rounded-xl p-4 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#df7b7b]/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <Cable className="h-8 w-8 text-[#df7b7b]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">Integración sin esfuerzo</h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  Integración sencilla con tus canales internos.
+                </p>
+                <div className="bg-[#df7b7b]/5 rounded-lg p-3 mt-11">
+                  <span className="text-[#df7b7b] font-bold text-lg">Conexión</span>
+                </div>
+              </div>
+
+              <div className="border border-[#df7b7b]/20 rounded-xl p-4 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#df7b7b]/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <BarChart3 className="h-8 w-8 text-[#df7b7b]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">Diagnostico organizacional</h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  Reportes y métricas para medir impacto y cumplimiento.
+                </p>
+                <div className="bg-[#df7b7b]/5 rounded-lg p-3">
+                  <span className="text-[#df7b7b] font-bold text-lg">Metricas</span>
+                </div>
+              </div>
+
+              <div className="border border-[#df7b7b]/20 rounded-xl p-4 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#df7b7b]/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <Network className="h-8 w-8 text-[#df7b7b]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">Conecta con quienes suman</h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  Acceso a red nacional de apoyo profesional.
+                </p>
+                <div className="bg-[#df7b7b]/5 rounded-lg p-3 mt-11">
+                  <span className="text-[#df7b7b] font-bold text-lg">Profesionalismo</span>
+                </div>
+              </div>
+
+              <div className="border border-[#df7b7b]/20 rounded-xl p-4 text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="mx-auto bg-[#df7b7b]/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <ShieldCheck className="h-8 w-8 text-[#df7b7b]" />
+                </div>
+                <h3 className="text-xl font-semibold text-[#152c62] mb-4">Cumplimiento que protege</h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  Prevención basada en cumplimiento real, no solo en el papel.
+                </p>
+                <div className="bg-[#df7b7b]/5 rounded-lg p-3">
+                  <span className="text-[#df7b7b] font-bold text-lg">Cumplimiento</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        {/*<section className="py-16 bg-white" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -215,7 +297,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section>*/}
 
         {/* Contact/CTA Section */}
         <section id="contact" className="py-16 bg-gradient-to-t from-[#6fb2ab] to-[#152c62] text-white" data-aos="zoom-in">
