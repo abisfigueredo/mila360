@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./globals.css";
 import { Header } from "@/components/header";
 import ChatAccessModal from "@/components/chataccessmodal";
@@ -9,8 +9,10 @@ import VideoModalSection from "@/components/videomodalsection";
 import { ContactForm } from "@/components/contactform";
 import { GuideInfo } from "@/components/guideinfo";
 import { Footer } from "@/components/footer";
-import { Shield, Brain, Users, Award, Play, Star, CheckCircle } from 'lucide-react';
+import { Clock, AlertTriangle, Scale, Handshake, Shield, Brain, Users, Award, Play, Star, CheckCircle } from 'lucide-react';
 import Link from "next/link";
+import AOS from 'aos'; // Para efecto visual de animación en secciones
+import 'aos/dist/aos.css'; // Para efecto visual de animación en secciones
 
 export default function Home() {
 
@@ -18,28 +20,41 @@ export default function Home() {
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [presetEmail, setPresetEmail] = useState("");
 
+  useEffect(() => {
+    AOS.init({
+      duration: 800, // duración de la animación en ms
+      once: true,    // solo se anima una vez
+    });
+  }, []);
 
   return (
     <div>
       <Header></Header>
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section id="home" className="pt-20 pb-16 bg-gradient-to-br from-gray-50 to-gray-100">
+        <section id="home" className="pt-20 pb-16 bg-gradient-to-br from-gray-50 to-gray-100" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-                  Cumple con la Ley 2365 de 2024 y Protege a Tu Equipo
+                  Tu empresa, libre de acoso de sexual
                 </h1>
+                <p className="text-lg leading-snug text-gray-700 mb-6">
+                  Cumple la Ley 2365 y crea un lugar donde todos se sientan seguros.
+                </p>
                 <p className="text-base leading-snug text-gray-700 mb-6">
-                  Cumplir la ley y prevenir el acoso sexual laboral no tiene por qué ser difícil. Haz un diagnóstico con MILA360 y descubre por dónde empezar.
+                  Mila360, tu agente virtual IA para prevenir el acoso sexual antes de que ocurra. Forma a tu equipo, detecta riesgos y actúa rápido.
+                </p>
+
+                <p className="text-base font-bold leading-snug text-gray-700 mb-6">
+                  Empieza tu proceso de prevención inteligente
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => setShowAccessModal(true)}
                     className="bg-[#df7b7b] text-white px-8 py-4 rounded-lg font-medium hover:bg-[#d45858] transition-colors shadow-lg text-center"
                   >
-                    Comenzar Ahora
+                    Accede gratis
                   </button>
                   {/* Solo muestra el modal si showModal es true */}
                   {showAccessModal && (
@@ -60,82 +75,91 @@ export default function Home() {
         </section>
 
         {/* Problem Section */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-white" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Los Riesgos del Incumplimiento
+                Una empresa consciente no puede ser neutral
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Las empresas que no cumplan con la Ley 2365 enfrentan serias consecuencias
               </p>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="text-center p-6 rounded-lg bg-red-50 border border-red-200">
-                <div className="text-4xl font-bold text-red-600 mb-2">500</div>
-                <p className="text-red-700 dark:text-red-300 font-medium">
-                  Multas de hasta 500 SMMLV
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="p-6 rounded-xl bg-orange-50 border border-orange-200 transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
+                <div className="text-center mb-6">
+                  <AlertTriangle className="w-10 h-10 mx-auto text-orange-600" />
+                </div>
+                <p className="text-orange-700 font-medium text-center">
+                  Ignorar el acoso sexual laboral es un riesgo legal, humano y reputacional.
                 </p>
               </div>
-              <div className="text-center p-6 rounded-lg bg-orange-50 border border-orange-200 ">
-                <div className="text-4xl font-bold text-orange-600 mb-2">⚠️</div>
-                <p className="text-orange-700 font-medium">
-                  Daño reputacional severo
+
+              <div className="p-6 rounded-lg bg-purple-50 border border-purple-200 transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
+                <div className="text-center mb-6">
+                  <Scale className="w-10 h-10 mx-auto text-purple-600" />
+                </div>
+                <p className="text-purple-700 font-medium text-center">
+                  La Ley 2365 exige que todas las empresas cuenten con un protocolo de prevención.
                 </p>
               </div>
-              <div className="text-center p-6 rounded-lg bg-yellow-50 border border-yellow-200">
-                <div className="text-4xl font-bold text-yellow-600 mb-2">👥</div>
-                <p className="text-yellow-700 font-medium">
-                  Pérdida de confianza del equipo
-                </p>
-              </div>
-              <div className="text-center p-6 rounded-lg bg-purple-50 border border-purple-200">
-                <div className="text-4xl font-bold text-purple-600 mb-2">⚖️</div>
-                <p className="text-purple-700 font-medium">
-                  Procesos legales prolongados
+
+              <div className="p-6 rounded-lg bg-yellow-50 border border-yellow-200 transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
+                <div className="text-center mb-6">
+                  <Handshake className="w-10 h-10 mx-auto text-yellow-600" />
+                </div>
+                <p className="text-yellow-700 font-medium text-center">
+                  Mila360 te ayuda a cumplir, pero sobre todo, a transformar tu cultura.
                 </p>
               </div>
             </div>
+
 
           </div>
         </section>    
 
         {/* Solution Section */}
-        <section id="features" className="py-16 bg-gray-50">
+        <section id="features" className="py-16 bg-gray-50" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                La Solución MILA360
+                Lo que obtendrás con Mila360
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Tecnología de IA para una cultura organizacional segura
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="text-center p-6 bg-white rounded-lg shadow-lg">
-                <Shield className="w-12 h-12 text-[#df7b7b] mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Diagnóstico organizacional automatizado
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+              <div className="text-center p-6 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
+                <Clock className="w-12 h-12 text-[#df7b7b] mx-auto mb-4" />
+                <h3 className="text-base font-semibold text-gray-900 mb-2">
+                  Plan de prevención en minutos
                 </h3>
               </div>
-              <div className="text-center p-6 bg-white rounded-lg shadow-lg">
-                <Brain className="w-12 h-12 text-[#6fb2ab] mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Asistente de IA confidencial 24/7
-                </h3>
-              </div>
-              <div className="text-center p-6 bg-white rounded-lg shadow-lg">
+              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xlg">
                 <Users className="w-12 h-12 text-[#152c62] mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Módulos de formación gamificados
+                <h3 className="text-base font-semibold text-gray-900 mb-2">
+                  Forma a tu equipo con contenido claro y humano.
                 </h3>
               </div>
-              <div className="text-center p-6 bg-white rounded-lg shadow-lg">
+              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
                 <Award className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Planes de acción personalizados
+                <h3 className="text-base font-semibold text-gray-900 mb-2">
+                  Adapta el plan a la cultura de tu empresa.
+                </h3>
+              </div>
+              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl">
+                <Brain className="w-12 h-12 text-[#6fb2ab] mx-auto mb-4" />
+                <h3 className="text-base font-semibold text-gray-900 mb-2">
+                  Accede a consultoria experta cuando más lo necesites.
+                </h3>
+              </div>
+              <div className="text-center p-4 bg-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xlg">
+                <Shield className="w-12 h-12 text-purple-600 mx-auto mb-4" />
+                <h3 className="text-base font-semibold text-gray-900 mb-2">
+                  Evita sanciones, protege tu reputación y cumple con la normativa.
                 </h3>
               </div>
             </div>
@@ -144,14 +168,14 @@ export default function Home() {
 
         {/* Demo Video Section */}
         <VideoModalSection
-          title="MILA360: Diagnóstico ágil para la prevención del acoso sexual laboral"
-          description="Descubre cómo nuestra plataforma puede transformar tu organización"
+          title="Tu plan de prevención en minutos ."
+          description="Descubre cómo Mila puede transformar tu organización."
           thumbnailSrc="/video_thumbnail.jpg"
           videoUrl="https://www.youtube.com/embed/EhUj1q9X17Y?rel=0&autoplay=1&controls=1"
         />
 
         {/* Testimonials Section */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-gray-50" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -194,14 +218,14 @@ export default function Home() {
         </section>
 
         {/* Contact/CTA Section */}
-        <section id="contact" className="py-16 bg-gradient-to-t from-[#6fb2ab] to-[#152c62] text-white">
+        <section id="contact" className="py-16 bg-gradient-to-t from-[#6fb2ab] to-[#152c62] text-white" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Comienza tu Transformación Hoy
+                No esperes a que ocurra un caso.
               </h2>
               <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-                Únete a las empresas que ya protegen a sus equipos
+                Protege a tu equipo, protege tu empresa.
               </p>
             </div>
 
