@@ -1,7 +1,7 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import emailjs from "@emailjs/browser";
 
 export const ContactForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -57,14 +57,28 @@ export const ContactForm = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const res = await fetch(process.env.NEXT_PUBLIC_FORMSPREE_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const result = await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_CONTACT,
+        {
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          correo: formData.correo,
+          cargo: formData.cargo,
+          nivelCargo: formData.nivelCargo,
+          empresa: formData.empresa,
+          departamento: formData.departamento,
+          ciudad: formData.ciudad,
+          comentarios: formData.comentarios,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      );
 
-    if (res.ok) {
+
+      console.log("Email enviado:", result.text);
       toast.success("¡Formulario enviado con éxito!");
+
       setFormData({
         nombre: "",
         apellido: "",
@@ -76,12 +90,13 @@ export const ContactForm = () => {
         ciudad: "",
         comentarios: "",
       });
-    } else {
+    } catch (error) {
+      console.error("Error al enviar email:", error);
       toast.error("Hubo un error al enviar el formulario.");
     }
+
     setIsLoading(false);
   };
-
   const departamentos = Object.keys(divipolaData);
   const ciudades = formData.departamento
     ? divipolaData[formData.departamento]?.municipios || []

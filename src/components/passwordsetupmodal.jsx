@@ -4,6 +4,7 @@ import { doc, setDoc, getDoc, serverTimestamp, collection, addDoc } from "fireba
 import { db } from "@/lib/firebaseConfig";
 import { LoginModal } from "@/components/loginmodal";
 import { Eye, EyeOff } from "lucide-react";
+import emailjs from "@emailjs/browser"
 
 export const PasswordSetupModal = ({ formData, onSuccess, onClose }) => {
   const [password, setPassword] = useState("");
@@ -67,6 +68,7 @@ export const PasswordSetupModal = ({ formData, onSuccess, onClose }) => {
       const userRef = doc(db, "users", user.uid);
       const existingUser = await getDoc(userRef);
 
+      // Registrar usuario
       if (!existingUser.exists()) {
         await setDoc(userRef, {
           uid: user.uid,
@@ -84,28 +86,48 @@ export const PasswordSetupModal = ({ formData, onSuccess, onClose }) => {
           },
         });
       }
+
+      // Enviar correo de invitación
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_BIENVENIDA,
+        {
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          email: email,
+          empresa: formData.empresa,
+          cargo: formData.cargo,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      );
       
-    // Crear conversación inicial con MILA
-    const chatsRef = collection(db, "users", user.uid, "chats");
-    const newChatRef = await addDoc(chatsRef, {
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      lastMessage: "Hola 👋, soy MILA, tu asistente especializado en prevención del acoso sexual laboral, ¿Te gustaría que hagamos un diagnóstico rapido para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?",
-    });
+      // Crear conversación inicial con MILA
+      const chatsRef = collection(db, "users", user.uid, "chats");
+      const newChatRef = await addDoc(chatsRef, {
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        lastMessage: "Hola 👋, soy MILA, tu asistente especializado en prevención del acoso sexual laboral, ¿Te gustaría que hagamos un diagnóstico rapido para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?",
+      });
 
-    const welcomeMessage = {
-      text: "Hola 👋, soy MILA, tu asistente especializado en prevención del acoso sexual laboral, ¿Te gustaría que hagamos un diagnóstico rapido para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?",
-      sender: "MILA",
-      timestamp: Date.now(),
-    };
+      const welcomeMessage = {
+        text: "Hola 👋, soy MILA, tu asistente especializado en prevención del acoso sexual laboral, ¿Te gustaría que hagamos un diagnóstico rapido para conocer qué tan preparada está tu empresa frente al acoso sexual laboral?",
+        sender: "MILA",
+        timestamp: Date.now(),
+      };
 
-    const messagesRef = collection(db, "users", user.uid, "chats", newChatRef.id, "messages");
-    await addDoc(messagesRef, welcomeMessage);
+      const messagesRef = collection(db, "users", user.uid, "chats", newChatRef.id, "messages");
+      await addDoc(messagesRef, welcomeMessage);
 
-    localStorage.setItem("correoUsuario", email);
-    onSuccess();
+      localStorage.setItem("correoUsuario", email);
+      onSuccess();
 
     } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        setErrorMsg("Este correo ya está registrado. Intenta iniciar sesión.");
+        // Devuelve al formulario con el mensaje
+        if (onClose) onClose("email-exists"); // Devuelve al formulario de registro con el mensaje
+        return;
+      }
       console.error("Error al crear cuenta:", error);
       setErrorMsg("Hubo un problema al crear la cuenta. Intenta nuevamente.");
     } finally {

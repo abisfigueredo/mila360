@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { PrivacyPolicyModal } from "./privacypolicymodal";
 import { PasswordSetupModal } from "@/components/passwordsetupmodal";
 import { LoginModal } from "@/components/loginmodal";
-import { useEmailCheck } from "@/app/hooks/useEmailCheck"
 
 export default function ChatAccessModal({ onClose, onLogin }) {
 
@@ -12,6 +11,8 @@ export default function ChatAccessModal({ onClose, onLogin }) {
   const [showPasswordSetup, setShowPasswordSetup] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [emailExists, setEmailExists] = useState(null);
+  const [checkingEmail, setCheckingEmail] = useState(false);
+
   // Estado para los datos del formulario
   const [formData, setFormData] = useState({
     nombre: '',
@@ -22,8 +23,6 @@ export default function ChatAccessModal({ onClose, onLogin }) {
     aceptaTratamiento: false,
   });
 
-  const { checkEmail, loading: checkingEmail } = useEmailCheck(); // Hook para verificar si el correo está registrado en firebase
-  
   const normalizedEmail = formData.email.trim().toLowerCase();
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail);
 
@@ -35,31 +34,7 @@ export default function ChatAccessModal({ onClose, onLogin }) {
     formData.empresa.trim() &&
     formData.email.trim() &&
     formData.aceptaTratamiento &&
-    isValidEmail &&
-    emailExists === false;
-
-  // Verificar si el correo digitado es valido o si si ya esta registrado
-  useEffect(() => {
-    const normalizedEmail = formData.email.trim().toLowerCase();
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail);
-
-    if (!isValidEmail) {
-      setEmailExists(null);
-      return;
-    }
-
-    const timeout = setTimeout(async () => {
-      try {
-        const exists = await checkEmail(normalizedEmail);
-        setEmailExists(exists);
-      } catch (error) {
-        console.error("Error al verificar el correo:", error);
-        setEmailExists(null); // En caso de error, no mostrar nada
-      }
-    }, 500); // Espera 500ms antes de verificar
-
-    return () => clearTimeout(timeout); // Cancela si el usuario sigue escribiendo
-  }, [normalizedEmail]);
+    isValidEmail;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -142,16 +117,15 @@ export default function ChatAccessModal({ onClose, onLogin }) {
               {emailExists === true && (
                 <p className="text-sm text-red-500 mt-1">Este correo ya está registrado.</p>
               )}
-              {checkingEmail && (
-                <p className="text-sm text-gray-500 mt-1">Verificando correo...</p>
-              )}
 
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-gray-700"
+                className={`mt-1 block w-full px-3 py-2 border ${
+                  emailExists === true ? 'border-red-500' : 'border-gray-300'
+                } rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-gray-700`}
               />
             </div>
 
@@ -237,12 +211,17 @@ export default function ChatAccessModal({ onClose, onLogin }) {
       {/* Mostrar modal de configuración de contraseña si es necesario */}
       {showPasswordSetup && (
         <PasswordSetupModal
-          formData={showPasswordSetup} // ✅ pasa el objeto completo
+          formData={showPasswordSetup} // Pasa los datos capturados (backend) al formulario de password
           onSuccess={() => {
             setShowPasswordSetup(false);
             setShowLoginModal(true);
           }}
-          onClose={() => setShowPasswordSetup(false)}
+          onClose={(reason) => {
+            setShowPasswordSetup(false);
+            if (reason === "email-exists") {
+              setEmailExists(true);
+            }
+          }}
         />
       )}
 

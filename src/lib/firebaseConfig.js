@@ -11,6 +11,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASURE_MENT_ID
 };
+console.log("[DEBUG] Proyecto de Firebase ID:", firebaseConfig.projectId);
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
