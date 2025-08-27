@@ -165,6 +165,12 @@ export const PasswordSetupModal = ({ formData, onSuccess, onClose }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md pr-10"
               />
+              {showPassword && (
+                <p className="text-xs text-gray-500 mt-1 italic">
+                  🔒 Recuerda mantener tu contraseña segura si estás en un lugar público.
+                </p>
+              )}
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}

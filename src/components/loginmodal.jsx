@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebaseConfig";
 import { useRouter } from 'next/navigation';
-import { Pencil } from "lucide-react";
+import { Pencil, Eye, EyeOff } from "lucide-react";
 import ChatAccessModal from "./chataccessmodal";
 
 export const LoginModal = ({ onClose, onRegister, email: presetEmail = "" }) => {
@@ -14,6 +14,7 @@ export const LoginModal = ({ onClose, onRegister, email: presetEmail = "" }) => 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [showAccessModal, setShowAccessModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -63,6 +64,7 @@ export const LoginModal = ({ onClose, onRegister, email: presetEmail = "" }) => 
             <div className="flex items-center gap-2">
               <input
                 type="email"
+                placeholder="Correo electronico"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={!isEditing && presetEmail}
@@ -83,15 +85,29 @@ export const LoginModal = ({ onClose, onRegister, email: presetEmail = "" }) => 
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña segura"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-gray-700"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-gray-700 pr-10"
             />
+            {showPassword && (
+              <p className="text-xs text-gray-500 mt-1 italic">
+                🔒 Recuerda mantener tu contraseña segura si estás en un lugar público.
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-2 text-gray-500 hover:text-gray-700"
+              title={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
+
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 

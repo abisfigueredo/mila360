@@ -9,7 +9,7 @@ import { loadUserChats } from '@/lib/firestoreHelpers';
 import { Header } from "@/components/header";
 import { ChatWindow } from '@/components/chatwindow';
 import toast from 'react-hot-toast';
-import { Menu } from 'lucide-react';
+import { X } from 'lucide-react';
 
 export default function ChatPage() {
   const router = useRouter();
@@ -80,18 +80,13 @@ export default function ChatPage() {
 
   return (
     <>
-      <Header hideNav={true} />
-      <main className="flex h-screen pt-16 bg-white text-gray-900 relative">
-        {/* Ícono acordeón en móvil */}
-        <div className="md:hidden px-4 py-2 bg-white border-b border-gray-200">
-          <button
-            className="text-[#df7b7b]"
-            onClick={() => setShowSidebarMobile(true)}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-        </div>
+      <Header
+        hideNav={true}
+        isChatPage={true}
+        onOpenSidebar={() => setShowSidebarMobile(true)}
+      />
 
+      <main className="flex h-screen pt-16 bg-white text-gray-900 relative">
 
         {/* Panel lateral en escritorio */}
         <aside
@@ -146,7 +141,7 @@ export default function ChatPage() {
               <button 
                 onClick={() => setShowSidebarMobile(false)}
               >
-                <Menu className="w-6 h-6 text-gray-700 rotate-180" />
+                <X className="w-6 h-6 text-gray-700 rotate-180" />
               </button>
             </div>
 

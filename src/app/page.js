@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import "./globals.css";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebaseConfig";
 import { Header } from "@/components/header";
 import ChatAccessModal from "@/components/chataccessmodal";
 import { LoginModal } from '@/components/loginmodal';
@@ -19,6 +21,16 @@ export default function Home() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [presetEmail, setPresetEmail] = useState("");
+
+  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+
+  //Capturar el estado de inicio de sesión
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setAuthenticatedUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     AOS.init({
@@ -180,7 +192,7 @@ export default function Home() {
         />
 
         {/* Why Section */}
-        <section className="py-16 bg-gray-50" data-aos="zoom-in">
+        <section id="features" className="py-16 bg-gray-50" data-aos="zoom-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -333,7 +345,9 @@ export default function Home() {
       <Header onOpenLogin={(email) => {
         setPresetEmail(email);
         setShowLoginModal(true);
-      }} />
+      }} 
+        authenticatedUser={authenticatedUser} //Captura el usuario autenticado
+      />
 
       {/*Utilizado para mostrar los modales de login desde chataccessmodal o viceversa*/}
       {showLoginModal && (
